@@ -1,20 +1,23 @@
 Create Database LibraryManagementSystem;
 Use LibraryManagementSystem;
 
+DROP table LibraryBranches;
+Drop table Borrowers;
+
 Create Table LibraryBranches(
-branchID int,
+branch_id int,
 branchName VARCHAR(100),
 branchAddress VARCHAR(500),
-Primary Key (branchID)
+Primary Key (branch_id)
 );
 
 Create Table Borrowers(
-borrowerID int, 
+borrower_id int, 
 fullName VARCHAR(100),
 address VARCHAR(500),
 card_no VARCHAR(10),
 phone_no VARCHAR(10), 
-Primary Key (borrowerID)
+Primary Key (borrower_id)
 );
 
 Insert Into LibraryBranches VALUES(1, "Alum Rock", 
@@ -69,5 +72,20 @@ INSERT INTO BookCopies (book_id, branch_id, no_of_copies) VALUES
 (9, 2, 5),
 (10, 3, 3);
 
-Select * from Book;
-Select * From BookCopies;
+Create Table BookLoans(
+book_id INT, 
+branch_id INT, 
+borrower_id INT, 
+date_out DATE, 
+date_due DATE, 
+PRIMARY KEY (book_id, branch_id, borrower_id), 
+FOREIGN KEY(book_id) references Book(book_id), 
+FOREIGN KEY(branch_id) references LibraryBranches(branch_id), 
+FOREIGN KEY(borrower_id) references Borrowers(borrower_id)
+);
+
+Insert Into BookLoans VALUES
+(1, 1, 5, '2024-04-01', '2024-04-22'),
+(2, 3, 4, '2024-04-02', '2024-04-23'),
+(5, 1, 1, '2024-04-05', '2024-04-26'),
+(7, 2, 3, '2024-04-15', '2024-05-06');
