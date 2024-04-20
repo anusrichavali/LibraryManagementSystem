@@ -3,6 +3,7 @@ from mysql.connector import Error
 from flask import Flask
 from flask import jsonify
 from flask import request
+from flask import render_template
 
 app = Flask(__name__)
 
@@ -14,5 +15,9 @@ def connect_database():
             return db
     except Error as er:
         print(f"There is an error in the connection process. {er}")
-        
+
+@app.route('/')      
+def index():
+    return render_template('index.html')
+
 app.run()
