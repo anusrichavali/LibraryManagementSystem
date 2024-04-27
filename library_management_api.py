@@ -9,15 +9,12 @@ app = Flask(__name__)
 
 def connect_database():
     try:
-        db = mysql.connector.connect(host='localhost', user='root', password='Delfina13!', database='LibraryManagementSystem')
+        db = mysql.connector.connect(host='localhost', user='project', password='final_proj13!', database='LibraryManagementSystem')
         if db.is_connected():
             print("The program has successfully connected to the LibraryManagementaSystem database.")
             return db
     except Error as er:
         print(f"There is an error in the connection process. {er}")
-@app.route('/')      
-def index():
-    return render_template('index.html')
 
 #CURD endpoints for the Book table
 
@@ -40,7 +37,7 @@ def add_book():
     except Exception as e:
         return jsonify({'error': str(e) + ' is missing'}), 500
 
-@app.route('/books', methods=['GET'])
+#@app.route('/books', methods=['GET'])
 def get_books():
     try:
         conn = connect_database()
@@ -48,9 +45,10 @@ def get_books():
         cursor.execute('SELECT * FROM Book')
         books = cursor.fetchall()
         conn.close()
-        return jsonify(books), 200
+        return books
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f'error: {str(e)}')
+        return []
 
 @app.route('/books/<int:book_id>', methods=['PUT'])
 def update_book(book_id):
@@ -98,7 +96,7 @@ def add_book_copy():
         no_of_copies = data['no_of_copies']
 
         conn = connect_database()
-        cursor = conn.cursor()
+        cursor = conn.cursor() 
         cursor.execute('INSERT INTO BookCopies (book_id, branch_id, no_of_copies) VALUES (%s, %s, %s)', (book_id, branch_id, no_of_copies))
         conn.commit()
         conn.close()
@@ -106,7 +104,7 @@ def add_book_copy():
     except Exception as e:
         return jsonify({'error': str(e) + ' is missing'}), 500
 
-@app.route('/bookcopies', methods=['GET'])
+#@app.route('/bookcopies', methods=['GET'])
 def get_book_copies():
     try:
         conn = connect_database()
@@ -114,9 +112,10 @@ def get_book_copies():
         cursor.execute('SELECT * FROM BookCopies')
         book_copies = cursor.fetchall()
         conn.close()
-        return jsonify(book_copies), 200
+        return book_copies
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f'error: {str(e)}')
+        return []
 
 @app.route('/bookcopies/<int:book_id>', methods=['PUT'])
 def update_book_copy(book_id):
@@ -170,7 +169,7 @@ def add_branch():
     except Exception as e:
         return jsonify({'error': str(e) + ' is missing'}), 500
 
-@app.route('/LibraryBranches', methods=['GET'])
+#@app.route('/LibraryBranches', methods=['GET'])
 def get_branches():
     try:
         connection = connect_database()
@@ -178,9 +177,10 @@ def get_branches():
         cursor.execute('SELECT * FROM LibraryBranches')
         branches = cursor.fetchall()
         connection.close()
-        return jsonify(branches), 200
+        return branches
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f'error: {str(e)}')
+        return []
     
 @app.route('/LibraryBranches/<int:branch_id>', methods = ['PUT'])
 def update_branch(branch_id):
@@ -238,17 +238,18 @@ def add_borrower():
     except Exception as e:
         return jsonify({'error': str(e) + ' is missing'}), 500
 
-@app.route('/Borrowers', methods=['GET'])
+#@app.route('/Borrowers', methods=['GET'])
 def get_borrowers():
     try:
         connection = connect_database()
         cursor = connection.cursor()
         cursor.execute('SELECT * FROM Borrowers')
-        branches = cursor.fetchall()
+        borrowers = cursor.fetchall()
         connection.close()
-        return jsonify(branches), 200
+        return borrowers
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f'error: {str(e)}')
+        return []
     
 @app.route('/Borrowers/<int:borrower_id>', methods = ['PUT'])
 def update_borrower(borrower_id):
@@ -281,13 +282,21 @@ def update_borrower(borrower_id):
 def delete_borrower(borrower_id):
     try:
         conn = connect_database()
-        cursor = conn.cursor()
+        cursor = conn.cursor() 
         cursor.execute('DELETE FROM Borrowers WHERE borrower_id = %s', (borrower_id,))
         conn.commit()
         conn.close()
         return jsonify({'message': 'Borrower deleted successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/')
+def index():
+    branches = get_branches()
+    borrowers = get_borrowers()
+    books = get_books()
+    book_copies = get_book_copies()
+    return render_template('index.html', branches = branches, borrowers = borrowers, books = books, book_copies = book_copies)
 
 app.run(debug=True)
 

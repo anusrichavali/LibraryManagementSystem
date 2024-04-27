@@ -7,6 +7,85 @@
 </head>
 <body>
     <h1>Welcome to the Library Management System!</h1>
-    <button>Add Branch</button>
+    <h3>Branches</h3>
+    <table>
+        <thead>
+            <th>Branch ID</th>
+            <th>Name</th>
+            <th>Address</th>
+        </thead>
+        <tbody>
+            {% for branch in branches %}
+            <tr>
+                <td>{{ branch[0] }}</td>
+                <td>{{ branch[1] }}</td>
+                <td>{{ branch[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3></h3>
+    <h3>Borrowers</h3>
+    <table>
+        <thead>
+            <th>Borrower ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Card Number</th>
+            <th>Phone Number</th>
+        </thead>
+        <tbody>
+            {% for borrower in borrowers %}
+            <tr>
+                <td>{{ borrower[0] }}</td>
+                <td>{{ borrower[1] }}</td>
+                <td>{{ borrower[2] }}</td>
+                <td>{{ borrower[3] }}</td>
+                <td>{{ borrower[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3></h3>
+    <h3>Books</h3>
+    <table>
+        <thead>
+            <th>Book ID</th>
+            <th>Title</th>
+            <th>Author First Name</th>
+            <th>Author Last Name</th>
+            <th>Genre</th>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book[0] }}</td>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+                <td>{{ book[3] }}</td>
+                <td>{{ book[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3></h3>
+    <h3>Book Copies</h3>
+    <table>
+        <thead>
+            <th>Book ID</th>
+            <th>Branch ID</th>
+            <th>Number of Copies @ Branch</th>
+        </thead>
+        <tbody>
+            {% for book_copy in book_copies %}
+            <tr>
+                <td>{{ book_copy[0] }}</td>
+                <td>{{ book_copy[1] }}</td>
+                <td>{{ book_copy[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 </body>
 </html>
