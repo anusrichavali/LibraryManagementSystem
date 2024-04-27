@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Management System</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to the Library Management System!</h1>
@@ -73,6 +78,7 @@
     <table>
         <thead>
             <th>Book ID</th>
+            <th>Title</th>
             <th>Branch ID</th>
             <th>Number of Copies @ Branch</th>
         </thead>
@@ -82,6 +88,7 @@
                 <td>{{ book_copy[0] }}</td>
                 <td>{{ book_copy[1] }}</td>
                 <td>{{ book_copy[2] }}</td>
+                <td>{{ book_copy[3] }}</td>
             </tr>
             {% endfor %}
         </tbody>
