@@ -1,0 +1,14 @@
+<!-- edits the branch that matches the selected branch_id-->
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Edit Branch {{branch[0]}}</h1>
+    <form action="/LibraryBranches/{{ branch[0] }}" method="POST">
+        <label for="branch_name">Branch Name:</label>
+        <input type="text" id="branch_name" name="branch_name" value="{{ branch[1] }}"><br>
+        <label for="branch_address">Branch Address:</label>
+        <input type="text" id="branch_address" name="branch_address" value="{{ branch[2] }}"><br>
+        <input type="submit" value="Update Branch">
+    </form>
+</body>
+</html>

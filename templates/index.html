@@ -8,12 +8,35 @@
         h1 {
             text-align: center;
         }
+
+        table {
+            border-collapse: collapse;
+            width: 100%; 
+        }
+
+        th{
+            border: 1px solid black; 
+            padding: 8px; 
+            text-align: center;
+            background-color: #f2f2f2; 
+        }
+        
+        td {
+            border: 1px solid black; 
+            padding: 8px; 
+            text-align: left;
+        }
+
+        caption {
+            font-size: larger;
+        }
+
     </style>
 </head>
 <body>
     <h1>Welcome to the Library Management System!</h1>
-    <h3>Branches</h3>
     <table>
+        <caption>Library Branches</caption>
         <thead>
             <th>Branch ID</th>
             <th>Name</th>
@@ -25,13 +48,14 @@
                 <td>{{ branch[0] }}</td>
                 <td>{{ branch[1] }}</td>
                 <td>{{ branch[2] }}</td>
+                <td><a href="/edit_branch/{{ branch[0] }}">Edit Branch</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     <h3></h3>
-    <h3>Borrowers</h3>
     <table>
+        <caption>Borrowers</caption>
         <thead>
             <th>Borrower ID</th>
             <th>Name</th>
@@ -47,13 +71,14 @@
                 <td>{{ borrower[2] }}</td>
                 <td>{{ borrower[3] }}</td>
                 <td>{{ borrower[4] }}</td>
+                <td><a href="/edit_borrower/{{ borrower[0] }}">Edit Borrower</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     <h3></h3>
-    <h3>Books</h3>
     <table>
+        <caption>Books</caption>
         <thead>
             <th>Book ID</th>
             <th>Title</th>
@@ -74,8 +99,8 @@
         </tbody>
     </table>
     <h3></h3>
-    <h3>Book Copies</h3>
     <table>
+        <caption>Book Copies</caption>
         <thead>
             <th>Book ID</th>
             <th>Title</th>

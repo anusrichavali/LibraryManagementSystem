@@ -1,0 +1,16 @@
+<!-- edits the borrower that matches the selected borrwer_id-->
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Edit Borrower {{borrower[0]}}</h1>
+    <form action="/Borrowers/{{ borrower[0] }}" method="POST">
+        <label for="borrower_name">Borrower Name:</label>
+        <input type="text" id="borrower_name" name="borrower_name" value="{{ borrower[1] }}"><br>
+        <label for="borrower_address">Address:</label>
+        <input type="text" id="borrower_address" name="borrower_address" value="{{ borrower[2] }}"><br>
+        <label for="borrower_phone_no">Phone Number</label>
+        <input type="text" id="borrower_phone_no" name="borrower_phone_no" value="{{ borrower[3] }}"><br>
+        <input type="submit" value="Update Borrower">
+    </form>
+</body>
+</html>

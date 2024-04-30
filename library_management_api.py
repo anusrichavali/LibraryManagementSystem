@@ -182,29 +182,32 @@ def get_branches():
         print(f'error: {str(e)}')
         return []
     
-@app.route('/LibraryBranches/<int:branch_id>', methods = ['PUT'])
+@app.route('/LibraryBranches/<int:branch_id>', methods=['POST'])
 def update_branch(branch_id):
     try:
-        data = request.get_json()
-        categories_to_update = data.keys()
-        columns = ['branchName', 'branchAddress']
-        for i in categories_to_update:
-            if i not in columns:
-                raise Exception("Invalid column name provided.")
+        branch_name = request.form['branch_name']
+        branch_address = request.form["branch_address"]
 
         connection = connect_database()
         cursor = connection.cursor()
-        if 'branchName' in categories_to_update:
-            branchName = data['branchName']
-            cursor.execute("Update LibraryBranches SET branchName = (%s) WHERE branch_id = (%s)", (branchName, branch_id))
-        if 'branchAddress' in categories_to_update:
-            branchAddress = data['branchAddress']
-            cursor.execute("Update LibraryBranches SET branchAddress = (%s) WHERE branch_id = (%s)", (branchAddress, branch_id))
+        cursor.execute("Update LibraryBranches SET branchName = (%s), branchAddress = (%s) WHERE branch_id = (%s)", (branch_name, branch_address, branch_id))
         connection.commit()
         connection.close()
-        return jsonify({'message': 'branch successfully updated'}), 201
+        return render_template('responses.html', message='Successfully updated branch')
     except Exception as ex:
-        return jsonify({'error in branch update': str(ex)}), 500
+        return render_template('responses.html', message='Error in branch update: ' + str(ex))
+    
+@app.route('/edit_branch/<int:branch_id>', methods=['GET'])
+def edit_branch(branch_id):
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM LibraryBranches WHERE branch_id = %s', (branch_id,))
+    branch = cursor.fetchone()
+    connection.close()
+    if branch:
+        return render_template('edit_branch.html', branch=branch)
+    else:
+        return 'Branch not found', 404
     
 @app.route('/LibraryBranches/<int:branch_id>', methods=['DELETE'])
 def delete_branch(branch_id):
@@ -251,32 +254,33 @@ def get_borrowers():
         print(f'error: {str(e)}')
         return []
     
-@app.route('/Borrowers/<int:borrower_id>', methods = ['PUT'])
+@app.route('/Borrowers/<int:borrower_id>', methods = ['POST'])
 def update_borrower(borrower_id):
     try:
-        data = request.get_json()
-        categories_to_update = data.keys()
-        columns = ['fullName', 'address', 'phone_no']
-        for i in categories_to_update:
-            if i not in columns:
-                raise Exception("Invalid column name provided.")
+        borrower_name = request.form['borrower_name']
+        borrower_address = request.form["borrower_address"]
+        borrower_phoneno = request.form["borrower_phone_no"]
 
         connection = connect_database()
         cursor = connection.cursor()
-        if 'fullName' in categories_to_update:
-            fullName = data['full name']
-            cursor.execute("Update Borrowers SET fullName = (%s) WHERE borrower_id = (%s)", (fullName, borrower_id))
-        if 'address' in categories_to_update:
-            address = data['address']
-            cursor.execute("Update Borrowers SET address = (%s) WHERE borrower_id = (%s)", (address, borrower_id))
-        if 'phone_no' in categories_to_update:
-            phone_no = data['phone_no']
-            cursor.execute("Update Borrowers SET phone_no = (%s) WHERE borrower_id = (%s)", (phone_no, borrower_id))
+        cursor.execute("Update Borrowers SET fullName = (%s), address = (%s), phone_no = (%s) WHERE borrower_id = (%s)", (borrower_name, borrower_address, borrower_phoneno, borrower_id))
         connection.commit()
         connection.close()
-        return jsonify({'message': 'borrower information successfully updated'}), 201
+        return render_template('responses.html', message='Successfully updated borrower')
     except Exception as ex:
-        return jsonify({'error in task update': str(ex)}), 500
+        return render_template('responses.html', message='Error in borrower update: ' + str(ex))
+    
+@app.route('/edit_borrower/<int:borrower_id>', methods=['GET'])
+def edit_borrower(borrower_id):
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute('SELECT borrower_id, fullName, address, phone_no FROM Borrowers WHERE borrower_id = %s', (borrower_id,))
+    borrower = cursor.fetchone()
+    connection.close()
+    if borrower:
+        return render_template('edit_borrower.html', borrower=borrower)
+    else:
+        return 'Borrower not found', 404
     
 @app.route('/Borrowers/<int:borrower_id>', methods=['DELETE'])
 def delete_borrower(borrower_id):
@@ -297,6 +301,7 @@ def index():
     books = get_books()
     book_copies = get_book_copies()
     return render_template('index.html', branches = branches, borrowers = borrowers, books = books, book_copies = book_copies)
+
 
 app.run(debug=True)
 
