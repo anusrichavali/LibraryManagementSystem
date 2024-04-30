@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+</head>
+<body>
+    <h1>Add a New Book</h1>
+    <form id="addBookForm">
+        <input type="text" id="book_id" name="book_id" placeholder="Book ID" required>
+        <input type="text" id="title" name="title" placeholder="Title" required>
+        <input type="text" id="authorFirstName" name="authorFirstName" placeholder="Author's First Name" required>
+        <input type="text" id="authorLastName" name="authorLastName" placeholder="Author's Last Name" required>
+        <input type="text" id="genre" name="genre" placeholder="Genre" required>
+        <button type="button" onclick="submitForm()">Add Book</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const formData = {
+                book_id: document.getElementById('book_id').value,
+                title: document.getElementById('title').value,
+                authorFirstName: document.getElementById('authorFirstName').value,
+                authorLastName: document.getElementById('authorLastName').value,
+                genre: document.getElementById('genre').value
+            };
+
+            fetch('/add_book', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => alert('Book added successfully!'))
+            .catch(error => alert('Error adding book: ' + error));
+        }
+    </script>
+</body>
+</html>

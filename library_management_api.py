@@ -18,7 +18,7 @@ def connect_database():
 
 #CURD endpoints for the Book table
 
-@app.route('/books', methods=['POST'])
+@app.route('/add_book', methods=['POST'])
 def add_book():
     try:
         data = request.json
@@ -36,6 +36,11 @@ def add_book():
         return jsonify({'message': 'Book added successfully'}), 201
     except Exception as e:
         return jsonify({'error': str(e) + ' is missing'}), 500
+
+@app.route('/add_book', methods=['GET'])
+def display_form():
+    # Render the HTML form located in the templates directory
+    return render_template('add_book.html')
 
 @app.route('/books', methods=['GET'])
 def get_books():
