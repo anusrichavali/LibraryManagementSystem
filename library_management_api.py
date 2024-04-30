@@ -50,26 +50,34 @@ def get_books():
         print(f'error: {str(e)}')
         return []
 
-@app.route('/books/<int:book_id>', methods=['PUT'])
+@app.route('/books/<int:book_id>', methods=['POST'])
 def update_book(book_id):
     try:
-        data = request.json
-        title = data.get('title')
-        authorFirstName = data.get('authorFirstName')
-        authorLastName = data.get('authorLastName')
-        genre = data.get('genre')
+        title = request.form['title']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        genre = request.form['genre']
 
-        conn = connect_database()
-        cursor = conn.cursor()
-        cursor.execute('UPDATE Book SET title = %s, authorFirstName = %s, authorLastName = %s, genre = %s WHERE book_id = %s', (title, authorFirstName, authorLastName, genre, book_id))
-        conn.commit()
-        if cursor.rowcount == 0:
-            conn.close()
-            return jsonify({'error': 'No such book found'}), 404
-        conn.close()
-        return jsonify({'message': 'Book updated successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        connection = connect_database()
+        cursor = connection.cursor()
+        cursor.execute("Update Book SET title = (%s), authorFirstName = (%s), authorLastName = (%s), genre = (%s) WHERE book_id = (%s)", (title, first_name, last_name, genre, book_id))
+        connection.commit()
+        connection.close()
+        return render_template('responses.html', message='Successfully updated book')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in book update: ' + str(ex))
+
+@app.route('/edit_book/<int:book_id>', methods=['GET'])
+def edit_book(book_id):
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM Book WHERE book_id = %s', (book_id,))
+    book = cursor.fetchone()
+    connection.close()
+    if book:
+        return render_template('edit_book.html', book = book)
+    else:
+        return 'Book not found', 404
 
 @app.route('/books/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id):
@@ -117,24 +125,33 @@ def get_book_copies():
         print(f'error: {str(e)}')
         return []
 
-@app.route('/bookcopies/<int:book_id>', methods=['PUT'])
+@app.route('/bookcopies/<int:book_id>', methods=['POST'])
 def update_book_copy(book_id):
     try:
-        data = request.json
-        branch_id = data.get('branch_id')
-        no_of_copies = data.get('no_of_copies')
+        title = request.form['title']
+        branch_id = request.form['branch_id']
+        no_of_copies = request.form['no_of_copies']
 
-        conn = connect_database()
-        cursor = conn.cursor()
-        cursor.execute('UPDATE BookCopies SET branch_id = %s, no_of_copies = %s WHERE book_id = %s', (branch_id, no_of_copies, book_id))
-        conn.commit()
-        if cursor.rowcount == 0:
-            conn.close()
-            return jsonify({'error': 'No such book copy found'}), 404
-        conn.close()
-        return jsonify({'message': 'Book copy updated successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        connection = connect_database()
+        cursor = connection.cursor()
+        cursor.execute("Update BookCopies SET title = (%s), branch_id = (%s), no_of_copies = (%s) WHERE book_id = (%s)", (title, branch_id, no_of_copies, book_id))
+        connection.commit()
+        connection.close()
+        return render_template('responses.html', message='Successfully updated book copy')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in book copy update: ' + str(ex))
+    
+@app.route('/edit_book_copy/<int:book_id>', methods=['GET'])
+def edit_book_copy(book_id):
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM BookCopies WHERE book_id = %s', (book_id,))
+    book_copy = cursor.fetchone()
+    connection.close()
+    if book_copy:
+        return render_template('edit_book_copy.html', book_copy = book_copy)
+    else:
+        return 'Book not found', 404
 
 @app.route('/bookcopies/<int:book_id>', methods=['DELETE'])
 def delete_book_copy(book_id):

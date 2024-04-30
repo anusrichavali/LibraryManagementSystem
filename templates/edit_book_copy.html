@@ -1,0 +1,16 @@
+<!-- edits the book copy that matches the selected book_id-->
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Edit Book Copy {{book_copy[0]}}</h1>
+    <form action="/bookcopies/{{ book_copy[0] }}" method="POST">
+        <label for="title">Book Title:</label>
+        <input type="text" id="title" name="title" value="{{ book_copy[1] }}"><br>
+        <label for="branch_id">Branch ID: </label>
+        <input type="text" id="branch_id" name="branch_id" value="{{ book_copy[2] }}"><br>
+        <label for="no_of_copies">Number of Copies @ Branch {{book_copy[2]}}: </label>
+        <input type="text" id="no_of_copies" name="no_of_copies" value="{{ book_copy[3] }}"><br>
+        <input type="submit" value="Update Book Copy">
+    </form>
+</body>
+</html>
