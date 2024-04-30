@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Library Management System</title>
+        <title>Books</title>
         <style>
             h1, h3 {
                 text-align: center;
@@ -52,41 +52,38 @@
             }
         </style>
     </head>
-<body>
-    <nav>
-        <ul>
-            <li> <h1>City of San Jose Library Management System</h1></li>
-            <li><a href="/">Home</a></li>
-            <li><a href="/book">Books</a></li>
-            <li><a href="/branches">Library Branches</a></li>
-            <li><a href="/borrowers">Borrowers</a></li>
-            <li><a href="/loans">Book Loans</a></li>
-        </ul>
-    </nav>
-</br>
-   
-    <h3></h3>
+    <body>
+        <nav>
+            <ul>
+                <li> <h1>City of San Jose Library Management System</h1></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/book">Books</a></li>
+                <li><a href="/branches">Library Branches</a></li>
+                <li><a href="/borrowers">Borrowers</a></li>
+                <li><a href="/loans">Book Loans</a></li>
+            </ul>
+        </nav>
+    </br>
     <table>
-        <caption>Book Copies <a href="/add_copies">Add Book Copies</a></caption>
+        <caption>Books <a href="/add_book">Add a New Book</a></caption>
         <thead>
             <th>Book ID</th>
             <th>Title</th>
-            <th>Branch ID</th>
-            <th>Number of Copies @ Branch</th>
+            <th>Author First Name</th>
+            <th>Author Last Name</th>
+            <th>Genre</th>
         </thead>
         <tbody>
-            {% for book_copy in book_copies %}
+            {% for book in books %}
             <tr>
-                <td>{{ book_copy[0] }}</td>
-                <td>{{ book_copy[1] }}</td>
-                <td>{{ book_copy[2] }}</td>
-                <td>{{ book_copy[3] }}</td>
+                <td>{{ book[0] }}</td>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+                <td>{{ book[3] }}</td>
+                <td>{{ book[4] }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-
-</body>
-</html>
-
-
+    </body>
+    </html>

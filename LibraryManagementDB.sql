@@ -42,6 +42,7 @@ CREATE TABLE Book (
 
 CREATE TABLE BookCopies (
     book_id INT,
+    title VARCHAR(255),
     branch_id INT,
     no_of_copies INT,
     FOREIGN KEY (book_id) REFERENCES Book(book_id)
@@ -60,17 +61,17 @@ INSERT INTO Book (book_id, title, authorFirstName, authorLastName, genre) VALUES
 (9, 'Hamlet', 'William', 'Shakespeare', 'Tragedy'),
 (10, 'The Divine Comedy', 'Dante', 'Alighieri', 'Epic Poem');
 
-INSERT INTO BookCopies (book_id, branch_id, no_of_copies) VALUES
-(1, 1, 3),
-(2, 3, 2),
-(3, 1, 4),
-(4, 2, 5),
-(5, 1, 3),
-(6, 2, 3),
-(7, 2, 2),
-(8, 3, 4),
-(9, 2, 5),
-(10, 3, 3);
+INSERT INTO BookCopies (book_id, title, branch_id, no_of_copies) VALUES
+(1, 'The Great Gatsby', 1, 3),
+(2, 'To Kill a Mockingbird', 3, 2),
+(3, '1984', 1, 4),
+(4, 'The Catcher in the Rye', 2, 5),
+(5, 'Pride and Prejudice', 1, 3),
+(6, 'Moby-Dick', 2, 3),
+(7, 'War and Peace', 2, 2),
+(8, 'The Odyssey', 3, 4),
+(9, 'Hamlet', 2, 5),
+(10, 'The Divine Comedy', 3, 3);
 
 Create Table BookLoans(
 book_id INT, 
@@ -89,3 +90,5 @@ Insert Into BookLoans VALUES
 (2, 3, 4, '2024-04-02', '2024-04-23'),
 (5, 1, 1, '2024-04-05', '2024-04-26'),
 (7, 2, 3, '2024-04-15', '2024-05-06');
+
+Select * FROM LibraryBranches;
