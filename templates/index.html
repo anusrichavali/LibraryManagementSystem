@@ -1,42 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Management System</title>
-    <style>
-        h1 {
-            text-align: center;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%; 
-        }
-
-        th{
-            border: 1px solid black; 
-            padding: 8px; 
-            text-align: center;
-            background-color: #f2f2f2; 
-        }
-        
-        td {
-            border: 1px solid black; 
-            padding: 8px; 
-            text-align: left;
-        }
-
-        caption {
-            font-size: larger;
-        }
-
-    </style>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Library Management System</title>
+        <style>
+            h1, h3 {
+                text-align: center;
+            }
+    
+            nav {
+                background-color: #333;
+                color: white;
+                padding: 10px 0;
+                text-align: center;
+            }
+    
+            nav ul {
+                list-style-type: none;
+                padding: 0;
+            }
+    
+            nav ul li {
+                display: inline;
+                margin-right: 20px;
+            }
+    
+            nav ul li a {
+                color: white;
+                text-decoration: none;
+                font-weight: bold;
+            }
+    
+            table {
+                border-collapse: collapse;
+                width: 100%; 
+            }
+    
+            th, td {
+                border: 1px solid black; 
+                padding: 8px; 
+                text-align: center;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+    
+            caption {
+                font-size: larger;
+            }
+        </style>
+    </head>
 <body>
-    <h1>Welcome to the Library Management System!</h1>
+    <nav>
+        <ul>
+            <li><a href="#books">Books</a></li>
+            <li><a href="#branches">Library Branches</a></li>
+            <li><a href="#borrowers">Borrowers</a></li>
+            <li><a href="#loans">Book Loans</a></li>
+        </ul>
+    </nav>
+    <h1>San Jose City Library Management System</h1>
     <table>
-        <caption>Library Branches</caption>
+        <caption>Library Branches <a href="/add_branch">Add a New Branch</a></caption> 
+        
         <thead>
             <th>Branch ID</th>
             <th>Name</th>
@@ -55,7 +83,7 @@
     </table>
     <h3></h3>
     <table>
-        <caption>Borrowers</caption>
+        <caption>Borrowers <a href="/add_borrower">Add a New Borrower</a></caption>
         <thead>
             <th>Borrower ID</th>
             <th>Name</th>
@@ -78,7 +106,7 @@
     </table>
     <h3></h3>
     <table>
-        <caption>Books</caption>
+        <caption>Books <a href="/add_book">Add a New Book</a></caption>
         <thead>
             <th>Book ID</th>
             <th>Title</th>
@@ -100,7 +128,7 @@
     </table>
     <h3></h3>
     <table>
-        <caption>Book Copies</caption>
+        <caption>Book Copies <a href="/add_copies">Add Book Copies</a></caption>
         <thead>
             <th>Book ID</th>
             <th>Title</th>
@@ -121,3 +149,5 @@
 
 </body>
 </html>
+
+
