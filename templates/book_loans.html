@@ -65,24 +65,32 @@
         </nav>
     </br>
     <table>
-        <caption>Books <a href="/add_book">Add a New Book</a></caption>
+        <caption>Book Loans</caption>
         <thead>
-            <th>Book ID</th>
-            <th>Title</th>
-            <th>Author First Name</th>
-            <th>Author Last Name</th>
-            <th>Genre</th>
+            <tr>
+                <th>Book ID</th>
+                <th>Branch ID</th>
+                <th>Borrower ID</th>
+                <th>Date Out</th>
+                <th>Date Due</th>
+            </tr>
         </thead>
         <tbody>
-            {% for book in books %}
-            <tr>
-                <td>{{ book[0] }}</td>
-                <td>{{ book[1] }}</td>
-                <td>{{ book[2] }}</td>
-                <td>{{ book[3] }}</td>
-                <td>{{ book[4] }}</td>
-            </tr>
-            {% endfor %}
+            {% if loans %}
+                {% for loan in loans %}
+                <tr>
+                    <td>{{ loan[0] }}</td>
+                    <td>{{ loan[1] }}</td>
+                    <td>{{ loan[2] }}</td>
+                    <td>{{ loan[3] }}</td>
+                    <td>{{ loan[4] }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5">No book loans found.</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
     </body>
