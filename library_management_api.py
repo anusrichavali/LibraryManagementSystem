@@ -96,18 +96,37 @@ def delete_book(book_id):
 def add_book_copy():
     try:
         data = request.json
-        book_id = data['book_id']
-        branch_id = data['branch_id']
-        no_of_copies = data['no_of_copies']
+        book_id = int(data['book_id'])  # Convert to integer if not already
+        title = data['title']
+        branch_id = int(data['branch_id'])  # Convert to integer if not already
+        no_of_copies = int(data['no_of_copies'])  # Explicitly convert to integer
 
         conn = connect_database()
-        cursor = conn.cursor() 
-        cursor.execute('INSERT INTO BookCopies (book_id, branch_id, no_of_copies) VALUES (%s, %s, %s)', (book_id, branch_id, no_of_copies))
+        cursor = conn.cursor()
+
+        # Check if the entry exists
+        cursor.execute('SELECT no_of_copies FROM BookCopies WHERE book_id = %s AND branch_id = %s', (book_id, branch_id))
+        result = cursor.fetchone()
+        if result:
+            # If entry exists, increment the number of copies
+            total_copies = result[0] + no_of_copies
+            cursor.execute('UPDATE BookCopies SET title = %s, no_of_copies = %s WHERE book_id = %s AND branch_id = %s', (title, total_copies, book_id, branch_id))
+        else:
+            # Else, create a new entry
+            cursor.execute('INSERT INTO BookCopies (book_id, title, branch_id, no_of_copies) VALUES (%s, %s, %s, %s)', (book_id, title, branch_id, no_of_copies))
         conn.commit()
         conn.close()
-        return jsonify({'message': 'Book copy added successfully'}), 201
+        return jsonify({'message': 'Book copy added or updated successfully'}), 201
     except Exception as e:
-        return jsonify({'error': str(e) + ' is missing'}), 500
+        if conn:
+            conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/add_bookcopies', methods=['GET'])
+def display_form_copies():
+    # Render the HTML form located in the templates directory
+    return render_template('add_bookcopies.html')
+
 
 #@app.route('/bookcopies', methods=['GET'])
 def get_book_copies():

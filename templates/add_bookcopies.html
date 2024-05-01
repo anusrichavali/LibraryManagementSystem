@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add/Update Book Copy</title>
+    <style>
+        h1, h3 {
+            text-align: center;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%; 
+        }
+
+        th, td {
+            border: 1px solid black; 
+            padding: 8px; 
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        caption {
+            font-size: larger;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li> <h1>City of San Jose Library Management System</h1></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/book">Books</a></li>
+            <li><a href="/branches">Library Branches</a></li>
+            <li><a href="/borrowers">Borrowers</a></li>
+            <li><a href="/loans">Book Loans</a></li>
+        </ul>
+    </nav>
+</br>
+    <h1>Add or Update Book Copies</h1>
+    <form action="/bookcopies" method="post">
+        <label for="book_id">Book ID:</label>
+        <input type="text" id="book_id" name="book_id" required><br><br>
+        
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br><br>
+        
+        <label for="branch_id">Branch ID:</label>
+        <input type="text" id="branch_id" name="branch_id" required><br><br>
+
+        <label for="no_of_copies">Number of Copies:</label>
+        <input type="number" id="no_of_copies" name="no_of_copies" required><br><br>
+        
+        <button type="submit">Add/Update Copies</button>
+    </form>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+    
+            fetch('/bookcopies', {  // Updated to point to the correct endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Book copy added or updated successfully');
+                console.log(data);
+            })
+            .catch(error => {
+                alert('Error adding or updating book copy: ' + error.message);
+                console.error('Error:', error);
+            });
+        });
+    </script>
+    
+</body>
+</html>
