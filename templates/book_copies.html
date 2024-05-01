@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Books</title>
+        <title>Book Loans</title>
         <style>
             h1, h3 {
                 text-align: center;
@@ -65,25 +65,26 @@
         </nav>
     </br>
     <table>
-        <caption>Books <a href="/add_book">Add a New Book</a></caption>
+        <caption>Book Copies for Book ID: {{ book_id }} <a href="/add_bookcopies">Add a New Book Copy</a></caption>
         <thead>
-            <th>Book ID</th>
-            <th>Title</th>
-            <th>Author First Name</th>
-            <th>Author Last Name</th>
-            <th>Genre</th>
+            <tr>
+                <th>Book ID</th>
+                <th>Title</th>
+                <th>Branch ID</th>
+                <th>Number of Copies</th>
+
+            </tr>
         </thead>
         <tbody>
-            {% for book in books %}
+            {% for copy in book_copies %}
             <tr>
-                <td>{{ book[0] }}</td>
-                <td><a href="/bookcopies/{{ book[0] }}">{{ book[1] }}</a></td>  <!-- Make title a link -->
-                <td>{{ book[2] }}</td>
-                <td>{{ book[3] }}</td>
-                <td>{{ book[4] }}</td>
+                <td>{{ copy[0] }}</td>
+                <td>{{ copy[1] }}</td>
+                <td>{{ copy[2] }}</td>
+                <td>{{ copy[3] }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    </body>
+</body>
     </html>

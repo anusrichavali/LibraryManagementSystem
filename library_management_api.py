@@ -121,6 +121,22 @@ def get_book_copies():
     except Exception as e:
         print(f'error: {str(e)}')
         return []
+    
+
+@app.route('/bookcopies/<int:book_id>', methods=['GET'])
+def get_book_copies1(book_id):
+    try:
+        conn = connect_database()
+        cursor = conn.cursor()
+        # Query to get copies of the specific book by book_id
+        cursor.execute('SELECT * FROM BookCopies WHERE book_id = %s', (book_id,))
+        book_copies = cursor.fetchall()
+        conn.close()
+        # Render an HTML template and pass the book copies data
+        return render_template('book_copies.html', book_copies=book_copies, book_id=book_id)
+    except Exception as e:
+        print(f'error: {str(e)}')
+        return render_template('error.html', error=str(e))  # Assume you have an error.html template
 
 @app.route('/bookcopies/<int:book_id>', methods=['PUT'])
 def update_book_copy(book_id):
@@ -173,6 +189,11 @@ def add_branch():
         return jsonify({'message': 'Branch added successfully'}), 201
     except Exception as e:
         return jsonify({'error': str(e) + ' is missing'}), 500
+
+@app.route('/add_branch', methods=['GET'])
+def display_form_branch():
+    # Render the HTML form located in the templates directory
+    return render_template('add_branch.html')
 
 #@app.route('/LibraryBranches', methods=['GET'])
 def get_branches():
@@ -246,7 +267,15 @@ def add_borrower():
     except Exception as e:
         return jsonify({'error': str(e) + ' is missing'}), 500
 
-#@app.route('/Borrowers', methods=['GET'])
+
+@app.route('/add_borrower', methods=['GET'])
+def display_form_borrower():
+    # Render the HTML form located in the templates directory
+    return render_template('add_borrower.html')
+
+
+
+@app.route('/Borrowers', methods=['GET'])
 def get_borrowers():
     try:
         connection = connect_database()

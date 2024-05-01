@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Book</title>
+    <title>Add Library Branch</title>
     <style>
         h1, h3 {
             text-align: center;
@@ -64,48 +64,43 @@
         </ul>
     </nav>
 </br>
-    <h1>Add a New Book</h1>
-    <form action="/add_book" method="post" onsubmit="event.preventDefault(); submitForm();">
-        <label for="book_id">Book ID:</label>
-        <input type="text" id="book_id" name="book_id" required><br><br>
-    
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required><br><br>
-    
-        <label for="authorFirstName">Author's First Name:</label>
-        <input type="text" id="authorFirstName" name="authorFirstName" required><br><br>
-    
-        <label for="authorLastName">Author's Last Name:</label>
-        <input type="text" id="authorLastName" name="authorLastName" required><br><br>
-    
-        <label for="genre">Genre:</label>
-        <input type="text" id="genre" name="genre" required><br><br>
-    
-        <button type="submit">Add Book</button>
+    <h1>Add Library Branch</h1>
+    <form action="/add_branch" method="post">
+        <label for="branch_id">Branch ID:</label>
+        <input type="text" id="branch_id" name="branch_id" required><br><br>
+        <label for="branch_name">Branch Name:</label>
+        <input type="text" id="branch_name" name="branch_name" required><br><br>
+        <label for="branch_address">Branch Address:</label>
+        <input type="text" id="branch_address" name="branch_address" required><br><br>
+        <button type="submit">Add Branch</button>
     </form>
-    
-
     <script>
         function submitForm() {
+            // Prepare form data based on the input fields for Library Branches
             const formData = {
-                book_id: document.getElementById('book_id').value,
-                title: document.getElementById('title').value,
-                authorFirstName: document.getElementById('authorFirstName').value,
-                authorLastName: document.getElementById('authorLastName').value,
-                genre: document.getElementById('genre').value
+                branch_id: document.getElementById('branch_id').value,
+                branchName: document.getElementById('branch_name').value,
+                branchAddress: document.getElementById('branch_address').value
             };
-
-            fetch('/add_book', {
+    
+            // Make a POST request to the '/LibraryBranches' endpoint
+            fetch('/LibraryBranches', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
-            .then(data => alert('Book added successfully!'))
-            .catch(error => alert('Error adding book: ' + error));
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Process the response if it's OK
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => alert('Branch added successfully!')) // Show success message
+            .catch(error => alert('Error adding branch: ' + error)); // Show error message
         }
     </script>
+    
 </body>
 </html>

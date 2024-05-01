@@ -1,7 +1,67 @@
 <!-- edits the book that matches the selected book_id-->
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <style>
+            h1, h3 {
+                text-align: center;
+            }
+    
+            nav {
+                background-color: #333;
+                color: white;
+                padding: 10px 0;
+                text-align: center;
+            }
+    
+            nav ul {
+                list-style-type: none;
+                padding: 0;
+            }
+    
+            nav ul li {
+                display: inline;
+                margin-right: 20px;
+            }
+    
+            nav ul li a {
+                color: white;
+                text-decoration: none;
+                font-weight: bold;
+            }
+    
+            table {
+                border-collapse: collapse;
+                width: 100%; 
+            }
+    
+            th, td {
+                border: 1px solid black; 
+                padding: 8px; 
+                text-align: center;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+    
+            caption {
+                font-size: larger;
+            }
+        </style>
+    </head>
 <body>
+    <nav>
+        <ul>
+            <li> <h1>City of San Jose Library Management System</h1></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/book">Books</a></li>
+            <li><a href="/branches">Library Branches</a></li>
+            <li><a href="/borrowers">Borrowers</a></li>
+            <li><a href="/loans">Book Loans</a></li>
+        </ul>
+    </nav>
+</br>
     <h1>Edit Book {{book[0]}}</h1>
     <form action="/books/{{ book[0] }}" method="POST">
         <label for="title">Book Title:</label>
