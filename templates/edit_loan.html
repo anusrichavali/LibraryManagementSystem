@@ -64,12 +64,22 @@
 </br>
     <h1>Edit Loan {{loan[0]}}</h1>
     <form action="/loans/{{ loan[0] }}/{{ loan[1] }}/{{ loan[2] }}" method="POST">
+        <input type="hidden" name="action" value="update">
         <label for="date_out">Date Out:</label>
-        <input type="text" id="date_out" name="date_out" value="{{ loan[3] }}"><br>
-        <label for="date_due">Due Date </label>
-        <input type="text" id="date_due" name="date_due" value="{{ loan[4] }}"><br>
-        <input type="submit" value="Update Branch">
+        <input type="date" id="date_out" name="date_out" value="{{ loan[3] }}"><br>
+        <label for="date_due">Due Date:</label>
+        <input type="date" id="date_due" name="date_due" value="{{ loan[4] }}"><br>
+        <input type="submit" value="Update Loan">
         <button><a href = "/loans">Back to Loans</a></button>
+    </form>
+    
+    <form action="/loans/{{ loan[0] }}/{{ loan[1] }}/{{ loan[2] }}" method="POST">
+        <input type="hidden" name="action" value="delete"> 
+        <input type="hidden" name="book_id" value="{{ loan[0] }}">
+        <input type="hidden" name="branch_id" value="{{ loan[1] }}">
+        <input type="hidden" name="borrower_id" value="{{ loan[2] }}">
+        <input type="submit" value="Delete Loan">
+
     </form>
 </body>
 </html>

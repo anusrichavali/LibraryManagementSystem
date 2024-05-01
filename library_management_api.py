@@ -9,14 +9,14 @@ app = Flask(__name__)
 
 def connect_database():
     try:
-        db = mysql.connector.connect(host='localhost', user='project', password='project12!', database='LibraryManagementSystem')
+        db = mysql.connector.connect(host='localhost', user='project', password='final_proj13!', database='LibraryManagementSystem')
         if db.is_connected():
             print("The program has successfully connected to the LibraryManagementaSystem database.")
             return db
     except Error as er:
         print(f"There is an error in the connection process. {er}")
 
-#CURD endpoints for the Book table
+#CRUD endpoints for the Book table
 
 @app.route('/add_book', methods=['POST'])
 def add_book():
@@ -98,7 +98,7 @@ def delete_book(book_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-#CURD emdpoints for the BookCopies table 
+#CURD endpoints for the BookCopies table 
 @app.route('/bookcopies', methods=['POST'])
 def add_book_copy():
     try:
@@ -398,8 +398,9 @@ def get_loans():
     except Error as db_err:
         return jsonify({'error': str(db_err)}), 500
     
-@app.route('/loans/<int:book_id>/<int:branch_id>/<int:borrower_id>', methods=['DELETE'])
+@app.route('/loans/<int:book_id>/<int:branch_id>/<int:borrower_id>', methods=['POST'])
 def delete_book_loan(book_id, branch_id, borrower_id):
+    
     try:
         conn = connect_database()
         cursor = conn.cursor()
