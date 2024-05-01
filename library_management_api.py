@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 def connect_database():
     try:
-        db = mysql.connector.connect(host='localhost', user='root', password='Delfina13', database='LibraryManagementSystem')
+        db = mysql.connector.connect(host='localhost', user='project', password='final_proj13!', database='LibraryManagementSystem')
         if db.is_connected():
             print("The program has successfully connected to the LibraryManagementaSystem database.")
             return db
@@ -347,6 +347,60 @@ def delete_borrower(borrower_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+#CRUD operations on loans
+@app.route('/loans', methods=['POST'])
+def add_bookloan():
+    try:
+        data = request.json
+        book_id = data['book_id']
+        branch_id = data['branch_id']
+        borrower_id = data['borrower_id']
+        date_out = data['date_out']
+        date_in = data['date_in']
+        date_due = data['date_due']
+
+        conn = connect_database()
+        cursor = conn.cursor()
+        query = ''' INSERT INTO BookLoans (book_id, branch_id, borrower_id, date_out, date_in, date_due)
+                VALUES (%s, %s, %s, %s, %s)
+            '''
+        cursor.execute(query, (book_id, branch_id, borrower_id, date_out, date_in, date_due))
+        conn.commit()
+        conn.close()
+        return jsonify({'message': 'Book loan added successfully'}), 201
+    except KeyError as ke:
+        return jsonify({'error': f'Missing key": {ke}'}), 400
+    except Error as db_err:
+        return jsonify({'error': str(db_err)}), 500
+    
+#@app.route('/loans', methods=['GET'])
+def get_loans():
+    try: 
+        conn = connect_database()
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM BookLoans')
+        book_loans = cursor.fetchall()
+        conn.close()
+    except Error as db_err:
+        return jsonify({'error': str(db_err)}), 500
+    
+@app.route('/loans/<int:book_id>/<int:branch_id>/<int:borrower_id>', methods=['DELETE'])
+def delete_book_loan(book_id, branch_id, borrower_id):
+    try:
+        conn = connect_database()
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM BookLoans WHERE book_id = %s AND branch_id = %s AND borrower_id = %s', (book_id, branch_id, borrower_id))  
+        conn.commit()
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'No such book loan found'}), 404
+        return jsonify({'message': 'Book loan deleted successfully'}), 200
+    except Error as db_err:
+        return jsonify({'error': str(db_err)}), 500  
+    finally:
+        cursor.close()
+        conn.close()
+
+
 @app.route('/')
 def index():
     branches = get_branches()
@@ -371,5 +425,10 @@ def branches():
 def borrowers():
     borrowers = get_borrowers()
     return render_template('borrowers.html', borrowers = borrowers)
+
+@app.route('/loans')
+def loans():
+    loans = get_loans()
+    return render_template('book_loans.html', loans = loans)
 
 app.run(debug=True)
