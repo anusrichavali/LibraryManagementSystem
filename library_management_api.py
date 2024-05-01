@@ -207,7 +207,7 @@ def delete_book_copy(book_id):
         return jsonify({'error': str(e)}), 500
 
 #CRUD operations on Library Branches
-@app.route('/LibraryBranches', methods = ['POST'])
+@app.route('/add_branch', methods = ['POST'])
 def add_branch():
     try:
         data = request.json

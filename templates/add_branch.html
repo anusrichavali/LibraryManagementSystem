@@ -56,7 +56,7 @@
     <nav>
         <ul>
             <li> <h1>City of San Jose Library Management System</h1></li>
-            <li><a href="/">Home</a></li>
+            <li><a href="/">Book Copies</a></li>
             <li><a href="/book">Books</a></li>
             <li><a href="/branches">Library Branches</a></li>
             <li><a href="/borrowers">Borrowers</a></li>
@@ -65,42 +65,45 @@
     </nav>
 </br>
     <h1>Add Library Branch</h1>
-    <form action="/LibraryBranches" method="post" enctype="application/json"></form>
+    <form action="/add_branch" method="post" enctype="application/json">
         <label for="branch_id">Branch ID:</label>
         <input type="text" id="branch_id" name="branch_id" required><br><br>
+
         <label for="branch_name">Branch Name:</label>
         <input type="text" id="branch_name" name="branch_name" required><br><br>
+
         <label for="branch_address">Branch Address:</label>
         <input type="text" id="branch_address" name="branch_address" required><br><br>
+        
         <button type="submit">Add Branch</button>
         <button><a href = "/branches">Back to Branches</a></button>
     </form>
     <script>
-        function submitForm() {
-            // Prepare form data based on the input fields for Library Branches
-            const formData = {
-                branch_id: document.getElementById('branch_id').value,
-                branchName: document.getElementById('branch_name').value,
-                branchAddress: document.getElementById('branch_address').value
-            };
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
     
-            // Make a POST request to the '/LibraryBranches' endpoint
-            fetch('/LibraryBranches', {
+            fetch('/add_branch', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(data)
             })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Network response was not ok.');
+            .then(response => response.json())
+            .then(data => {
+                alert('Branch added successfully');
+                console.log(data);
             })
-            .then(data => alert('Branch added successfully!'))
-            .catch(error => alert('Error adding branch: ' + error)); 
-        }
+            .catch(error => {
+                alert('Error adding branch');
+                console.error('Error:', error);
+            });
+        });
     </script>
     
 </body>
