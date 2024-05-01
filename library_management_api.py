@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 def connect_database():
     try:
-        db = mysql.connector.connect(host='localhost', user='root', password='Delfina13', database='LibraryManagementSystem')
+        db = mysql.connector.connect(host='localhost', user='project', password='project12!', database='LibraryManagementSystem')
         if db.is_connected():
             print("The program has successfully connected to the LibraryManagementaSystem database.")
             return db
@@ -212,8 +212,8 @@ def add_branch():
     try:
         data = request.json
         branch_id = data['branch_id']
-        branchName = data['branch name']
-        branchAddress = data['branch address']
+        branchName = data['branch_name']
+        branchAddress = data['branch_address']
 
         connection = connect_database()
         cursor = connection.cursor()
