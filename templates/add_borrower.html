@@ -56,7 +56,7 @@
     <nav>
         <ul>
             <li> <h1>City of San Jose Library Management System</h1></li>
-            <li><a href="/bookCopies">Book Copies</a></li>
+            <li><a href="/">Book Copies</a></li>
             <li><a href="/book">Books</a></li>
             <li><a href="/branches">Library Branches</a></li>
             <li><a href="/borrowers">Borrowers</a></li>
@@ -82,10 +82,11 @@
         <input type="text" id="phone_number" name="phone number" required><br><br>
 
         <button type="submit">Add Borrower</button>
+        <button><a href = "/borrowers">Back to Borrowers</a></button>
     </form>
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevent the default form submission
+            event.preventDefault();
             const formData = new FormData(this);
             const data = {};
             formData.forEach((value, key) => {

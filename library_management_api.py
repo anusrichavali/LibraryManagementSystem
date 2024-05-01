@@ -307,8 +307,6 @@ def display_form_borrower():
     # Render the HTML form located in the templates directory
     return render_template('add_borrower.html')
 
-
-
 @app.route('/Borrowers', methods=['GET'])
 def get_borrowers():
     try:
@@ -446,7 +444,6 @@ def edit_book_loan(book_id, branch_id, borrower_id):
 def index():
     book_copies = get_book_copies()
     return render_template('index.html', book_copies = book_copies)
-
 
 @app.route('/book')
 def book():
