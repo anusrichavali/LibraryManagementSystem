@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 def connect_database():
     try:
-        db = mysql.connector.connect(host='localhost', user='project', password='final_proj13!', database='LibraryManagementSystem')
+        db = mysql.connector.connect(host='localhost', user='project', password='project12!', database='LibraryManagementSystem')
         if db.is_connected():
             print("The program has successfully connected to the LibraryManagementaSystem database.")
             return db
@@ -55,26 +55,33 @@ def get_books():
         print(f'error: {str(e)}')
         return []
 
-@app.route('/books/<int:book_id>', methods=['PUT'])
+@app.route('/books/<int:book_id>', methods=['POST'])
 def update_book(book_id):
     try:
-        data = request.json
-        title = data.get('title')
-        authorFirstName = data.get('authorFirstName')
-        authorLastName = data.get('authorLastName')
-        genre = data.get('genre')
-
-        conn = connect_database()
-        cursor = conn.cursor()
-        cursor.execute('UPDATE Book SET title = %s, authorFirstName = %s, authorLastName = %s, genre = %s WHERE book_id = %s', (title, authorFirstName, authorLastName, genre, book_id))
-        conn.commit()
-        if cursor.rowcount == 0:
-            conn.close()
-            return jsonify({'error': 'No such book found'}), 404
-        conn.close()
-        return jsonify({'message': 'Book updated successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        title = request.form['title']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        genre = request.form['genre']
+        connection = connect_database()
+        cursor = connection.cursor()
+        cursor.execute("Update Book SET title = (%s), authorFirstName = (%s), authorLastName = (%s), genre = (%s) WHERE book_id = (%s)", (title, first_name, last_name, genre, book_id))
+        connection.commit()
+        connection.close()
+        return render_template('responses.html', message='Successfully updated book', url = '/book')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in book update: ' + str(ex), url = '/book')
+    
+@app.route('/edit_book/<int:book_id>', methods=['GET'])
+def edit_book(book_id):
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM Book WHERE book_id = %s', (book_id,))
+    book = cursor.fetchone()
+    connection.close()
+    if book:
+        return render_template('edit_book.html', book = book)
+    else:
+        return 'Book not found', 404
 
 @app.route('/books/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id):
@@ -157,25 +164,33 @@ def get_book_copies1(book_id):
         print(f'error: {str(e)}')
         return render_template('error.html', error=str(e))  # Assume you have an error.html template
 
-@app.route('/bookcopies/<int:book_id>', methods=['PUT'])
+@app.route('/bookcopies/<int:book_id>', methods=['POST'])
 def update_book_copy(book_id):
     try:
-        data = request.json
-        branch_id = data.get('branch_id')
-        no_of_copies = data.get('no_of_copies')
+        title = request.form['title']
+        branch_id = request.form['branch_id']
+        no_of_copies = request.form['no_of_copies']
+        connection = connect_database()
+        cursor = connection.cursor()
+        cursor.execute("Update BookCopies SET title = (%s), branch_id = (%s), no_of_copies = (%s) WHERE book_id = (%s)", (title, branch_id, no_of_copies, book_id))
+        connection.commit()
+        connection.close()
+        return render_template('responses.html', message='Successfully updated book copy', url = '/')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in book copy update: ' + str(ex), url = '/')
 
-        conn = connect_database()
-        cursor = conn.cursor()
-        cursor.execute('UPDATE BookCopies SET branch_id = %s, no_of_copies = %s WHERE book_id = %s', (branch_id, no_of_copies, book_id))
-        conn.commit()
-        if cursor.rowcount == 0:
-            conn.close()
-            return jsonify({'error': 'No such book copy found'}), 404
-        conn.close()
-        return jsonify({'message': 'Book copy updated successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
+@app.route('/edit_book_copy/<int:book_id>', methods=['GET'])
+def edit_book_copy(book_id):
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM BookCopies WHERE book_id = %s', (book_id,))
+    book_copy = cursor.fetchone()
+    connection.close()
+    if book_copy:
+        return render_template('edit_book_copy.html', book_copy = book_copy)
+    else:
+        return 'Book not found', 404
+    
 @app.route('/bookcopies/<int:book_id>', methods=['DELETE'])
 def delete_book_copy(book_id):
     try:
@@ -238,7 +253,7 @@ def update_branch(branch_id):
         cursor.execute("Update LibraryBranches SET branchName = (%s), branchAddress = (%s) WHERE branch_id = (%s)", (branch_name, branch_address, branch_id))
         connection.commit()
         connection.close()
-        return render_template('responses.html', message='Successfully updated branch')
+        return render_template('responses.html', message='Successfully updated branch', url = '/branches')
     except Exception as ex:
         return render_template('responses.html', message='Error in branch update: ' + str(ex))
     
@@ -319,7 +334,7 @@ def update_borrower(borrower_id):
         cursor.execute("Update Borrowers SET fullName = (%s), address = (%s), phone_no = (%s) WHERE borrower_id = (%s)", (borrower_name, borrower_address, borrower_phoneno, borrower_id))
         connection.commit()
         connection.close()
-        return render_template('responses.html', message='Successfully updated borrower')
+        return render_template('responses.html', message='Successfully updated borrower', url = '/borrowers')
     except Exception as ex:
         return render_template('responses.html', message='Error in borrower update: ' + str(ex))
     
@@ -348,7 +363,7 @@ def delete_borrower(borrower_id):
         return jsonify({'error': str(e)}), 500
     
 #CRUD operations on loans
-@app.route('/loans', methods=['POST'])
+@app.route('/add_loans', methods=['POST'])
 def add_bookloan():
     try:
         data = request.json
@@ -381,6 +396,7 @@ def get_loans():
         cursor.execute('SELECT * FROM BookLoans')
         book_loans = cursor.fetchall()
         conn.close()
+        return book_loans
     except Error as db_err:
         return jsonify({'error': str(db_err)}), 500
     
@@ -400,14 +416,36 @@ def delete_book_loan(book_id, branch_id, borrower_id):
         cursor.close()
         conn.close()
 
+@app.route('/loans/<int:book_id>/<int:branch_id>/<int:borrower_id>', methods=['POST'])
+def update_book_loan(book_id, branch_id, borrower_id):
+    try:
+        date_out = request.form['date_out']
+        date_due = request.form['date_due']
+        connection = connect_database()
+        cursor = connection.cursor()
+        cursor.execute("Update BookLoans SET date_out = (%s), date_due = (%s) WHERE book_id = (%s) and branch_id = (%s) and borrower_id = (%s)", (date_out, date_due, book_id, branch_id, borrower_id))
+        connection.commit()
+        connection.close()
+        return render_template('responses.html', message='Successfully updated book', url = '/loans')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in book update: ' + str(ex), url = '/loans')
+
+@app.route('/edit_loan/<int:book_id>/<int:branch_id>/<int:borrower_id>', methods=['GET'])
+def edit_book_loan(book_id, branch_id, borrower_id):
+    connection = connect_database()
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM BookLoans WHERE book_id = (%s) and branch_id = (%s) and borrower_id = (%s)', (book_id, branch_id, borrower_id,))
+    loan = cursor.fetchone()
+    connection.close()
+    if loan:
+        return render_template('edit_loan.html', loan = loan)
+    else:
+        return 'Loan not found', 404
 
 @app.route('/')
 def index():
-    branches = get_branches()
-    borrowers = get_borrowers()
-    books = get_books()
     book_copies = get_book_copies()
-    return render_template('index.html', branches = branches, borrowers = borrowers, books = books, book_copies = book_copies)
+    return render_template('index.html', book_copies = book_copies)
 
 
 @app.route('/book')

@@ -56,7 +56,7 @@
         <nav>
             <ul>
                 <li> <h1>City of San Jose Library Management System</h1></li>
-                <li><a href="/">Home</a></li>
+                <li><a href="/">Book Copies</a></li>
                 <li><a href="/book">Books</a></li>
                 <li><a href="/branches">Library Branches</a></li>
                 <li><a href="/borrowers">Borrowers</a></li>
@@ -77,10 +77,11 @@
             {% for book in books %}
             <tr>
                 <td>{{ book[0] }}</td>
-                <td><a href="/bookcopies/{{ book[0] }}">{{ book[1] }}</a></td>  <!-- Make title a link -->
+                <td>{{ book[1] }}</td>  <!-- Make title a link -->
                 <td>{{ book[2] }}</td>
                 <td>{{ book[3] }}</td>
                 <td>{{ book[4] }}</td>
+                <td><a href="/edit_book/{{ book[0] }}">Edit Book</a></td>
             </tr>
             {% endfor %}
         </tbody>
