@@ -72,5 +72,12 @@
         <input type="text" id="borrower_phone_no" name="borrower_phone_no" value="{{ borrower[3] }}"><br>
         <input type="submit" value="Update Borrower">
     </form>
+    <form action="/Borrowers/{{borrower[0]}}" method="POST">
+        <input type="hidden" name="action" value="delete"> 
+        <input type="hidden" name="borrower_name" value="{{ borrower[1] }}">
+        <input type="hidden" name="borrower_address" value="{{ borrower[2] }}">
+        <input type="hidden" name="borrower_phone_no" value="{{ borrower[3] }}">
+        <input type="submit" value="Delete Borrower">
+    </form>
 </body>
 </html>
