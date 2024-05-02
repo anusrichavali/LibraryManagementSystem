@@ -7,6 +7,9 @@ This project is a Library Management System developed using Python and MySQL, wi
 - View existing data through a user-friendly web interface.
 - Built with Python/Flask for backend and MySQL for database management.
 
+## Use Case
+The system is designed for administrator access. 
+
 ## Installation
 To set up the project locally, follow these steps:
 
