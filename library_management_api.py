@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 def connect_database():
     try:
-        db = mysql.connector.connect(host='localhost', user='project', password='project12!', database='LibraryManagementSystem')
+        db = mysql.connector.connect(host='localhost', user='project', password='final_proj13!', database='LibraryManagementSystem')
         if db.is_connected():
             print("The program has successfully connected to the LibraryManagementaSystem database.")
             return db
@@ -368,9 +368,9 @@ def delete_borrower(borrower_id):
         cursor.execute('DELETE FROM Borrowers WHERE borrower_id = %s', (borrower_id,))
         conn.commit()
         conn.close()
-        return jsonify({'message': 'Borrower deleted successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return render_template('responses.html', message='Borrower deleted successfully', url = '/Borrowers')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in borrower deletion: ' + str(ex))
     
 #CRUD operations on loans
 @app.route('/add_loans', methods=['POST'])
@@ -429,14 +429,12 @@ def delete_book_loan(book_id, branch_id, borrower_id):
         cursor = conn.cursor()
         cursor.execute('DELETE FROM BookLoans WHERE book_id = %s AND branch_id = %s AND borrower_id = %s', (book_id, branch_id, borrower_id))  
         conn.commit()
+        conn.close()
         if cursor.rowcount == 0:
             return jsonify({'error': 'No such book loan found'}), 404
-        return jsonify({'message': 'Book loan deleted successfully'}), 200
-    except Error as db_err:
-        return jsonify({'error': str(db_err)}), 500  
-    finally:
-        cursor.close()
-        conn.close()
+        return render_template('responses.html', message='Loan deleted successfully', url = '/book_loans')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in loan deletion: ' + str(ex))
 
 @app.route('/loans/<int:book_id>/<int:branch_id>/<int:borrower_id>', methods=['POST'])
 def update_book_loan(book_id, branch_id, borrower_id):
