@@ -360,7 +360,7 @@ def edit_borrower(borrower_id):
     else:
         return 'Borrower not found', 404
     
-@app.route('/Borrowers/<int:borrower_id>', methods=['POST'])
+@app.route('/delete_borrowers/<int:borrower_id>', methods=['POST'])
 def delete_borrower(borrower_id):
     try:
         conn = connect_database()
