@@ -386,22 +386,28 @@ def add_bookloan():
         return jsonify({'error': str(db_err)}), 500
     
 
+
 @app.route('/add_loans', methods=['GET'])
 def display_form_loans():
     # Render the HTML form located in the templates directory
     return render_template('add_loans.html')
 
-#@app.route('/loans', methods=['GET'])
+@app.route('/book_loans', methods=['GET'])
 def get_loans():
-    try: 
+    borrower_id = request.args.get('borrower_id')
+    try:
         conn = connect_database()
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM BookLoans')
+        if borrower_id:
+            cursor.execute('SELECT * FROM BookLoans WHERE borrower_id = %s', (borrower_id,))
+        else:
+            cursor.execute('SELECT * FROM BookLoans')
         book_loans = cursor.fetchall()
         conn.close()
-        return book_loans
+        return render_template('book_loans.html', loans=book_loans)
     except Error as db_err:
         return jsonify({'error': str(db_err)}), 500
+
     
 @app.route('/loans/<int:book_id>/<int:branch_id>/<int:borrower_id>', methods=['POST'])
 def delete_book_loan(book_id, branch_id, borrower_id):
@@ -445,6 +451,7 @@ def edit_book_loan(book_id, branch_id, borrower_id):
         return render_template('edit_loan.html', loan = loan)
     else:
         return 'Loan not found', 404
+    
 
 @app.route('/')
 def index():
