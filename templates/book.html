@@ -1,90 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Books</title>
-        <style>
-            h1, h3 {
-                text-align: center;
-            }
-    
-            nav {
-                background-color: #333;
-                color: white;
-                padding: 10px 0;
-                text-align: center;
-            }
-    
-            nav ul {
-                list-style-type: none;
-                padding: 0;
-            }
-    
-            nav ul li {
-                display: inline;
-                margin-right: 20px;
-            }
-    
-            nav ul li a {
-                color: white;
-                text-decoration: none;
-                font-weight: bold;
-            }
-    
-            table {
-                border-collapse: collapse;
-                width: 100%; 
-            }
-    
-            th, td {
-                border: 1px solid black; 
-                padding: 8px; 
-                text-align: center;
-            }
-    
-            th {
-                background-color: #f2f2f2;
-            }
-    
-            caption {
-                font-size: larger;
-            }
-        </style>
-    </head>
-    <body>
-        <nav>
-            <ul>
-                <li> <h1>City of San Jose Library Management System</h1></li>
-                <li><a href="/">Home</a></li>
-                <li><a href="/book">Books</a></li>
-                <li><a href="/branches">Library Branches</a></li>
-                <li><a href="/borrowers">Borrowers</a></li>
-                <li><a href="/book_loans">Book Loans</a></li>
-            </ul>
-        </nav>
-    </br>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <style>
+        h1, h3 { text-align: center; }
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav ul { list-style-type: none; padding: 0; }
+        nav ul li { display: inline; margin-right: 20px; }
+        nav ul li a { color: white; text-decoration: none; font-weight: bold; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        caption { font-size: larger; }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><h1>City of San Jose Library Management System</h1></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/book">Books</a></li>
+            <li><a href="/branches">Library Branches</a></li>
+            <li><a href="/borrowers">Borrowers</a></li>
+            <li><a href="/book_loans">Book Loans</a></li>
+        </ul>
+    </nav>
+    <br>
+    <form action="/book" method="get">
+        <label for="searchBookTitle">Search by Book Title:</label>
+        <input type="text" id="searchBookTitle" name="title">
+        <button type="submit">Search</button>
+    </form>
+    <br>
     <table>
         <caption>Books <a href="/add_book">Add a New Book</a></caption>
         <thead>
-            <th>Book ID</th>
-            <th>Title</th>
-            <th>Author First Name</th>
-            <th>Author Last Name</th>
-            <th>Genre</th>
+            <tr>
+                <th>Book ID</th>
+                <th>Title</th>
+                <th>Author First Name</th>
+                <th>Author Last Name</th>
+                <th>Genre</th>
+                <th>Actions</th>
+            </tr>
         </thead>
         <tbody>
-            {% for book in books %}
-            <tr>
-                <td>{{ book[0] }}</td>
-                <td><a href="/bookcopies/{{ book[0] }}">{{ book[1] }}</a></td>
-                <td>{{ book[2] }}</td>
-                <td>{{ book[3] }}</td>
-                <td>{{ book[4] }}</td>
-                <td><a href="/edit_book/{{ book[0] }}">Edit Book</a></td>
-            </tr>
-            {% endfor %}
+            {% if books %}
+                {% for book in books %}
+                <tr>
+                    <td>{{ book[0] }}</td>
+                    <td><a href="/bookcopies/{{ book[0] }}">{{ book[1] }}</a></td>
+                    <td>{{ book[2] }}</td>
+                    <td>{{ book[3] }}</td>
+                    <td>{{ book[4] }}</td>
+                    <td><a href="/edit_book/{{ book[0] }}">Edit Book</a></td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6">No books found.</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
-    </body>
-    </html>
+</body>
+</html>

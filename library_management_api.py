@@ -27,33 +27,39 @@ def add_book():
         authorFirstName = data['authorFirstName']
         authorLastName = data['authorLastName']
         genre = data['genre']
-
+        borrower_id = request.args.get('title')
         conn = connect_database()
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO Book (book_id, title, authorFirstName, authorLastName, genre) VALUES (%s, %s, %s, %s, %s)', (book_id, title, authorFirstName, authorLastName, genre))
-        conn.commit()
+        if title:
+            cursor.execute('SELECT * FROM Book WHERE title = %s', (title,))
+        else:
+            cursor.execute('SELECT * FROM Book')
+        book_loans = cursor.fetchall()
         conn.close()
-        return jsonify({'message': 'Book added successfully'}), 201
-    except Exception as e:
-        return jsonify({'error': str(e) + ' is missing'}), 500
+        return render_template('book.html', books=book)
+    except Error as db_err:
+        return jsonify({'error': str(db_err)}), 500
 
 @app.route('/add_book', methods=['GET'])
 def display_form():
     # Render the HTML form located in the templates directory
     return render_template('add_book.html')
 
-@app.route('/books', methods=['GET'])
+@app.route('/book', methods=['GET'])
 def get_books():
+    title = request.args.get('title', '')  # Default empty if title is not provided
     try:
         conn = connect_database()
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Book')
+        query = "SELECT * FROM Book WHERE title LIKE %s"
+        cursor.execute(query, ('%' + title + '%',))
         books = cursor.fetchall()
         conn.close()
-        return books
+        return render_template('book.html', books=books)
     except Exception as e:
-        print(f'error: {str(e)}')
-        return []
+        print(f'Error: {str(e)}')
+        return jsonify({'error': 'Internal Server Error'}), 500
+
 
 @app.route('/books/<int:book_id>', methods=['POST'])
 def update_book(book_id):
