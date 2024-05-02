@@ -275,7 +275,7 @@ def edit_branch(branch_id):
     else:
         return 'Branch not found', 404
     
-@app.route('/LibraryBranches/<int:branch_id>', methods=['DELETE'])
+@app.route('/LibraryBranches/<int:branch_id>', methods=['POST'])
 def delete_branch(branch_id):
     try:
         conn = connect_database()
@@ -283,9 +283,9 @@ def delete_branch(branch_id):
         cursor.execute('DELETE FROM LibraryBranches WHERE branch_id = %s', (branch_id,))
         conn.commit()
         conn.close()
-        return jsonify({'message': 'Branch deleted successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return render_template('responses.html', message='Branch deleted successfully', url='/LibraryBranches')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in branch deletion: ' + str(ex))
     
 #CRUD operations on borrowers
 @app.route('/Borrowers', methods = ['POST'])
@@ -360,15 +360,17 @@ def edit_borrower(borrower_id):
     else:
         return 'Borrower not found', 404
     
-@app.route('/Borrowers/<int:borrower_id>', methods=['DELETE'])
+@app.route('/delete_borrowers/<int:borrower_id>', methods=['POST'])
 def delete_borrower(borrower_id):
     try:
         conn = connect_database()
-        cursor = conn.cursor() 
+        cursor = conn.cursor()
         cursor.execute('DELETE FROM Borrowers WHERE borrower_id = %s', (borrower_id,))
         conn.commit()
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'No such borrower found'}), 404
         conn.close()
-        return render_template('responses.html', message='Borrower deleted successfully', url = '/Borrowers')
+        return render_template('responses.html', message='Borrower deleted successfully', url='/borrowers')
     except Exception as ex:
         return render_template('responses.html', message='Error in borrower deletion: ' + str(ex))
     

@@ -71,5 +71,10 @@
         <input type="submit" value="Update Branch">
         <button><a href = "/branches">Back to Branches</a></button>
     </form>
+
+    <form action="/LibraryBranches/{{ branch[0] }}" method="POST">
+        <input type="hidden" name="action" value="delete"> 
+        <input type="hidden" name="branch_id" value="{{ branch[0] }}">
+        <input type="submit" value="Delete Branch">
 </body>
 </html>
