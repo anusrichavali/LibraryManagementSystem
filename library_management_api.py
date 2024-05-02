@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 def connect_database():
     try:
-        db = mysql.connector.connect(host='localhost', user='project', password='final_proj13!', database='LibraryManagementSystem')
+        db = mysql.connector.connect(host='localhost', user='root', password='Delfina13', database='LibraryManagementSystem')
         if db.is_connected():
             print("The program has successfully connected to the LibraryManagementaSystem database.")
             return db
@@ -27,18 +27,15 @@ def add_book():
         authorFirstName = data['authorFirstName']
         authorLastName = data['authorLastName']
         genre = data['genre']
-        borrower_id = request.args.get('title')
         conn = connect_database()
         cursor = conn.cursor()
-        if title:
-            cursor.execute('SELECT * FROM Book WHERE title = %s', (title,))
-        else:
-            cursor.execute('SELECT * FROM Book')
-        book_loans = cursor.fetchall()
+        cursor.execute('INSERT INTO Book (book_id, title, authorFirstName, authorLastName, genre) VALUES (%s, %s, %s, %s, %s)', (book_id, title, authorFirstName, authorLastName, genre))
+        conn.commit()
         conn.close()
-        return render_template('book.html', books=book)
-    except Error as db_err:
-        return jsonify({'error': str(db_err)}), 500
+        return jsonify({'message': 'Book added successfully'}), 201
+    except Exception as e:
+        return jsonify({'error': str(e) + ' is missing'}), 500
+
 
 @app.route('/add_book', methods=['GET'])
 def display_form():
