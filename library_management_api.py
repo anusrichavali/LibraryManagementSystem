@@ -313,18 +313,24 @@ def display_form_borrower():
     # Render the HTML form located in the templates directory
     return render_template('add_borrower.html')
 
-@app.route('/Borrowers', methods=['GET'])
+@app.route('/borrowers', methods=['GET'])
 def get_borrowers():
+    borrower_id = request.args.get('borrower_id')
     try:
         connection = connect_database()
         cursor = connection.cursor()
-        cursor.execute('SELECT * FROM Borrowers')
+        if borrower_id:
+            # If a borrower_id is provided, filter the results
+            cursor.execute("SELECT * FROM Borrowers WHERE borrower_id = %s", (borrower_id,))
+        else:
+            # If no borrower_id, retrieve all borrowers
+            cursor.execute("SELECT * FROM Borrowers")
         borrowers = cursor.fetchall()
         connection.close()
-        return borrowers
+        return render_template('borrowers.html', borrowers=borrowers)  # assuming borrowers.html is your HTML file
     except Exception as e:
-        print(f'error: {str(e)}')
-        return []
+        print(f"Error: {str(e)}")
+        return jsonify({'error': 'Internal Server Error'}), 500
     
 @app.route('/Borrowers/<int:borrower_id>', methods = ['POST'])
 def update_borrower(borrower_id):
