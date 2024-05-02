@@ -443,8 +443,8 @@ def edit_book_loan(book_id, branch_id, borrower_id):
 
 @app.route('/')
 def index():
-    book_copies = get_book_copies()
-    return render_template('index.html', book_copies = book_copies)
+    branches = get_branches()
+    return render_template('index.html', branches = branches)
 
 @app.route('/book')
 def book():
