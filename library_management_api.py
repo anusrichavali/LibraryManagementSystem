@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 def connect_database():
     try:
-        db = mysql.connector.connect(host='localhost', user='root', password='Delfina13', database='LibraryManagementSystem')
+        db = mysql.connector.connect(host='localhost', user='project', password='project12!', database='LibraryManagementSystem')
         if db.is_connected():
             print("The program has successfully connected to the LibraryManagementaSystem database.")
             return db
@@ -175,9 +175,9 @@ def update_book_copy(book_id):
         cursor.execute("Update BookCopies SET title = (%s), branch_id = (%s), no_of_copies = (%s) WHERE book_id = (%s)", (title, branch_id, no_of_copies, book_id))
         connection.commit()
         connection.close()
-        return render_template('responses.html', message='Successfully updated book copy', url = '/')
+        return render_template('responses.html', message='Successfully updated book copy', url = '/book')
     except Exception as ex:
-        return render_template('responses.html', message='Error in book copy update: ' + str(ex), url = '/')
+        return render_template('responses.html', message='Error in book copy update: ' + str(ex), url = '/book')
 
 @app.route('/edit_book_copy/<int:book_id>', methods=['GET'])
 def edit_book_copy(book_id):
