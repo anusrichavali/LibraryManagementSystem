@@ -70,7 +70,7 @@
         <label for="date_due">Due Date:</label>
         <input type="date" id="date_due" name="date_due" value="{{ loan[4] }}"><br>
         <input type="submit" value="Update Loan">
-        <button><a href = "/loans">Back to Loans</a></button>
+        <button><a href = "/book_loans">Back to Loans</a></button>
     </form>
     
     <form action="/loans/{{ loan[0] }}/{{ loan[1] }}/{{ loan[2] }}" method="POST">
