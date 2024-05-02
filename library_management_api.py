@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 def connect_database():
     try:
-        db = mysql.connector.connect(host='localhost', user='project', password='project12!', database='LibraryManagementSystem')
+        db = mysql.connector.connect(host='localhost', user='root', password='Delfina13', database='LibraryManagementSystem')
         if db.is_connected():
             print("The program has successfully connected to the LibraryManagementaSystem database.")
             return db
@@ -369,15 +369,14 @@ def add_bookloan():
         branch_id = data['branch_id']
         borrower_id = data['borrower_id']
         date_out = data['date_out']
-        date_in = data['date_in']
         date_due = data['date_due']
 
         conn = connect_database()
         cursor = conn.cursor()
-        query = ''' INSERT INTO BookLoans (book_id, branch_id, borrower_id, date_out, date_in, date_due)
+        query = ''' INSERT INTO BookLoans (book_id, branch_id, borrower_id, date_out, date_due)
                 VALUES (%s, %s, %s, %s, %s)
             '''
-        cursor.execute(query, (book_id, branch_id, borrower_id, date_out, date_in, date_due))
+        cursor.execute(query, (book_id, branch_id, borrower_id, date_out, date_due))
         conn.commit()
         conn.close()
         return jsonify({'message': 'Book loan added successfully'}), 201
@@ -386,17 +385,29 @@ def add_bookloan():
     except Error as db_err:
         return jsonify({'error': str(db_err)}), 500
     
-#@app.route('/loans', methods=['GET'])
+
+
+@app.route('/add_loans', methods=['GET'])
+def display_form_loans():
+    # Render the HTML form located in the templates directory
+    return render_template('add_loans.html')
+
+@app.route('/book_loans', methods=['GET'])
 def get_loans():
-    try: 
+    borrower_id = request.args.get('borrower_id')
+    try:
         conn = connect_database()
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM BookLoans')
+        if borrower_id:
+            cursor.execute('SELECT * FROM BookLoans WHERE borrower_id = %s', (borrower_id,))
+        else:
+            cursor.execute('SELECT * FROM BookLoans')
         book_loans = cursor.fetchall()
         conn.close()
-        return book_loans
+        return render_template('book_loans.html', loans=book_loans)
     except Error as db_err:
         return jsonify({'error': str(db_err)}), 500
+
     
 @app.route('/loans/<int:book_id>/<int:branch_id>/<int:borrower_id>', methods=['POST'])
 def delete_book_loan(book_id, branch_id, borrower_id):
@@ -440,6 +451,7 @@ def edit_book_loan(book_id, branch_id, borrower_id):
         return render_template('edit_loan.html', loan = loan)
     else:
         return 'Loan not found', 404
+    
 
 @app.route('/')
 def index():
@@ -462,9 +474,10 @@ def borrowers():
     borrowers = get_borrowers()
     return render_template('borrowers.html', borrowers = borrowers)
 
-@app.route('/loans')
+@app.route('/book_loans')
 def loans():
     loans = get_loans()
     return render_template('book_loans.html', loans = loans)
+
 
 app.run(debug=True)
