@@ -73,5 +73,11 @@
         <input type="submit" value="Update Book Copy">
         <button><a href = "/book">Back to Book Copies</a></button>
     </form>
+
+    <form action="/delete_book_copy/{{ book_copy[0] }}" method="POST">
+        <input type="hidden" name="action" value="delete"> 
+        <input type="hidden" name="book_id" value="{{ book_copy[0] }}">
+        <input type="submit" value="Delete Book Copy">
+    </form>
 </body>
 </html>

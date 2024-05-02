@@ -72,9 +72,10 @@
         <button><a href = "/branches">Back to Branches</a></button>
     </form>
 
-    <form action="/LibraryBranches/{{ branch[0] }}" method="POST">
+    <form action="/delete_branch/{{ branch[0] }}" method="POST">
         <input type="hidden" name="action" value="delete"> 
         <input type="hidden" name="branch_id" value="{{ branch[0] }}">
         <input type="submit" value="Delete Branch">
+    </form>
 </body>
 </html>

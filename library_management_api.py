@@ -89,7 +89,7 @@ def edit_book(book_id):
     else:
         return 'Book not found', 404
 
-@app.route('/books/<int:book_id>', methods=['DELETE'])
+@app.route('/delete_book/<int:book_id>', methods=['POST'])
 def delete_book(book_id):
     try:
         conn = connect_database()
@@ -100,9 +100,9 @@ def delete_book(book_id):
             conn.close()
             return jsonify({'error': 'No such book found'}), 404
         conn.close()
-        return jsonify({'message': 'Book deleted successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return render_template('responses.html', message='Book deleted successfully', url='/book')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in book deletion: ' + str(ex))
     
 #CURD endpoints for the BookCopies table 
 @app.route('/bookcopies', methods=['POST'])
@@ -197,7 +197,7 @@ def edit_book_copy(book_id):
     else:
         return 'Book not found', 404
     
-@app.route('/bookcopies/<int:book_id>', methods=['DELETE'])
+@app.route('/delete_book_copy/<int:book_id>', methods=['POST'])
 def delete_book_copy(book_id):
     try:
         conn = connect_database()
@@ -208,9 +208,9 @@ def delete_book_copy(book_id):
             conn.close()
             return jsonify({'error': 'No such book copy found'}), 404
         conn.close()
-        return jsonify({'message': 'Book copy deleted successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return render_template('responses.html', message='Book Copy deleted successfully', url='/book')
+    except Exception as ex:
+        return render_template('responses.html', message='Error in book copy deletion: ' + str(ex))
 
 #CRUD operations on Library Branches
 @app.route('/add_branch', methods = ['POST'])
@@ -275,7 +275,7 @@ def edit_branch(branch_id):
     else:
         return 'Branch not found', 404
     
-@app.route('/LibraryBranches/<int:branch_id>', methods=['POST'])
+@app.route('/delete_branch/<int:branch_id>', methods=['POST'])
 def delete_branch(branch_id):
     try:
         conn = connect_database()
@@ -283,7 +283,7 @@ def delete_branch(branch_id):
         cursor.execute('DELETE FROM LibraryBranches WHERE branch_id = %s', (branch_id,))
         conn.commit()
         conn.close()
-        return render_template('responses.html', message='Branch deleted successfully', url='/LibraryBranches')
+        return render_template('responses.html', message='Branch deleted successfully', url='/branches')
     except Exception as ex:
         return render_template('responses.html', message='Error in branch deletion: ' + str(ex))
     
@@ -425,7 +425,6 @@ def get_loans():
     
 @app.route('/loans/<int:book_id>/<int:branch_id>/<int:borrower_id>', methods=['POST'])
 def delete_book_loan(book_id, branch_id, borrower_id):
-    
     try:
         conn = connect_database()
         cursor = conn.cursor()
