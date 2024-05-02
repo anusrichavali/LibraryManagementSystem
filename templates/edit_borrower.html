@@ -74,7 +74,7 @@
         <input type="submit" value="Update Borrower">
         <button><a href = "/Borrowers">Back to Borrowers</a></button>
     </form>
-    <form action="/delete_borrower/{{borrower[0]}}" method="POST">
+    <form action="/delete_borrowers/{{borrower[0]}}" method="POST">
         <input type="hidden" name="action" value="delete"> 
         <input type="hidden" name="borrower_name" value="{{ borrower[1] }}">
         <input type="hidden" name="borrower_address" value="{{ borrower[2] }}">
